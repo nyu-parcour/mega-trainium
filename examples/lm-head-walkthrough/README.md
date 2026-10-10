@@ -8,8 +8,8 @@ profile (`neuron-explorer` capture via `megakernel/kernels/profile_mega.py`) →
 #17, #18). The **heuristics queries and nkiequiv proofs are run live** by `replay_cpu.py` (output:
 `results/cpu_replay.txt`, CPU only). The **device numbers are from the profiles and tests recorded during the
 original work** (`megakernel/results/profiles/{head,head_hwdge,head_tiled}/bounds.json`, ATTEMPTS.md).
-`run_device.sh` reproduces the device half; a re-run at 21:25 UTC on 2026-10-10 found both free logical
-cores held by another process, so no device number here is from that re-run. On the day, the changes came
+`run_device.sh` re-measured v0, v1 and v2 at 21:41–21:47 UTC the same evening and matched them within 1.5%
+(below the table); v2a and v3 can't be re-run as they stood (v2a's bug is fixed in the code, v3 needs the full step). On the day, the changes came
 from reading profiles and nkilib source; the corpus queries were added afterwards and show what an agent
 following the skill is handed at each step. It starts from the library head, as the skill prescribes, not
 from a hand-written naive kernel; the first hand-written version (v2a) is the one that was wrong.
@@ -24,6 +24,11 @@ from a hand-written naive kernel; the first hand-written version (v2a) is the on
 | v2 | v2a with one PSUM tile per vocab tile | **2.23 ms** (−18% vs v0), 280 GB/s | logits rel-L2 2.38e-3, identical to nkilib's head | — | **EQUIVALENT**: 0.33 s at small tiles, 21.6 s at full Trainium2 tiles |
 | control | v2 with one k-tile skipped | — | — | — | **NOT_EQUIVALENT**, counterexample at output [0, 0] naming the missing `x[*, 3]` terms (0.35 s) |
 | v3 | v2 inside the full one-launch step | 2 layers, fixed position: 3.71 vs 4.28 ms | generate loop: **out-of-bounds indirect DMA** (scalar DGE, nrta 1006) on the second token | `for_error`: `dma-dge-mode-selection` (choose the DGE mode per DMA deliberately), `op-gather-scatter-is-the-weak-spot` | can't model indirect DMA |
+
+Re-measured with `run_device.sh` on 2026-10-10, 21:41–21:47 UTC (`results/*.log`, `results/bounds.log`, profiles in
+`megakernel/results/profiles/ex_head*`): **2.71 / 2.53 / 2.20 ms** per core for v0 / v1 / v2 (230 / 246 / 285 GB/s);
+logits rel-L2 2.377e-3 for both v0 and v2. The profile shows the mechanism: v0 and v1 move the 622 MB per core in
+~4,130 DMAs of ~150 KB each (~1.2 KB per partition), v2 in ~155 DMAs of ~4 MB (32 KB per partition).
 
 v3 is unresolved, so the final megakernel keeps v0 and leaves ~0.48 ms per token here. The corpus's lead
 (the embedding and RoPE-row gathers use software DGE while v2 put the head's weight DMAs on hardware DGE in
