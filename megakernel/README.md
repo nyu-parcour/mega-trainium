@@ -80,6 +80,8 @@ tensor-parallel collectives, the LM head, sampling and HTTP), so read it as "the
 not as the per-op baseline. The remaining 30% to the floor is the per-layer HBM residual round trip
 (the library's `sbuf_residual_and_cc=True` path removes it), the descriptor cost of the KV-cache
 indirect update, and the un-overlapped tail of each block; the heuristics document lists the fixes.
+**Measured later, this guess was wrong:** the profile put the residual round trip at ~1% of the time, and the
+`sbuf_residual_and_cc` path made the kernel 9.6% slower. See Follow-up 1.
 
 ## Correctness
 
