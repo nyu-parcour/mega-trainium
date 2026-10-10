@@ -2,7 +2,7 @@
 
 The Qwen3-8B LM head (4096 → 151,936 vocabulary projection + argmax, 1.24 GB of weights per token), taken
 from the library kernel to our own, following the skill's loop:
-profile → bounds → ask the rules corpus → one change → prove the piece → device gate → profile again.
+profile (`neuron-explorer` capture via `megakernel/kernels/profile_mega.py`) → bounds (`analyze_profile.py`) → ask the rules corpus → one change → prove the piece → device gate → profile again.
 
 **What this is, exactly.** A replay of the LM-head work from 2026-10-10 (`megakernel/ATTEMPTS.md` #9, #10,
 #17, #18). The **heuristics queries and nkiequiv proofs are run live** by `replay_cpu.py` (output:

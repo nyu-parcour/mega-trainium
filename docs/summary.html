@@ -173,7 +173,8 @@ footer .files { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(
         <span style="left:0%">0</span><span style="left:20%">15</span><span style="left:40%">30</span><span style="left:60%">45</span><span style="left:80%">60</span><span style="left:100%">75 ms</span>
       </div></div>
     </div>
-    <p class="chart-note">The vLLM figure isn't like-for-like (it uses two cores and includes serving overhead); it shows the stack as deployed. The one-launch kernel runs at 75% of the memory-bandwidth floor.</p>
+    <p class="chart-note">The vLLM figure isn't like-for-like (it uses two cores and includes serving overhead); it shows the stack as deployed. The one-launch kernel runs at 75% of the memory-bandwidth floor (551 GB/s achieved).</p>
+    <p class="chart-note">Of the 7.0 ms above the floor, about 5.9 are in the 36 layers (25.00 ms against a 19.08 ms floor, 76%) and about 1.0 in the embedding, LM head and argmax (~2.7 ms against 1.7).</p>
   </div>
 </section>
 
@@ -289,7 +290,7 @@ footer .files { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(
         <tr><td class="n">2</td><td>Gate a float32 reference against HuggingFace; its bf16 run is the baseline</td><td>reference exact to 9e-7, so every later error was the kernel's</td></tr>
         <tr><td class="n">3</td><td>Build on <code>nkilib</code> blocks, write only the glue</td><td>36 layers in one launch on day one</td></tr>
         <tr><td class="n">4</td><td>Gate every change; a rejection names the cause</td><td>52% mask bug found in an afternoon</td></tr>
-        <tr><td class="n">5</td><td>Profile with device counters, compute bounds, change one thing</td><td>−5.8% from one flag; the documented next step measured 10% slower</td></tr>
+        <tr><td class="n">5</td><td>Profile on the device with <code>neuron-explorer</code> (the successor of <code>neuron-profile</code>), compute bounds, change one thing</td><td>−5.8% from one flag; the documented next step measured 10% slower</td></tr>
         <tr><td class="n">6</td><td>Measure the real generation loop</td><td>33.9 → 27.7 ms per token</td></tr>
         <tr><td class="n">7</td><td>Report with spread</td><td>3 runs × 30 calls; 3 prompts × 32 steps</td></tr>
       </tbody>

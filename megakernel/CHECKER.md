@@ -6,7 +6,7 @@ nothing flags on its own: it compiles, runs, and returns numbers of the right si
 against an independent reference and, when it rejects, to **name the change to make**.
 
 ```
-NEURON_RT_VISIBLE_CORES=2 python check.py --resident   # final run, 2026-10-10 20:36 UTC
+NEURON_RT_VISIBLE_CORES=2 python check.py --resident   # final run, 2026-10-10 20:30 UTC
 [PASS] layout  reference matches HF  (17s)
 [PASS] tiny    max error 1.02e-02 within 2.2e-02 (3x the 7.3e-03 that bf16 rounding alone gives)  (17s)
 [PASS] head    embedding exact, logits rel-L2 2.4e-03, argmax consistent  (48s)

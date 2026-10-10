@@ -9,7 +9,7 @@ an embedding gather and the LM-head layout. Checked by `check.py` (see `CHECKER.
 in `ATTEMPTS.md`.
 
 **On what.** One trn2 workshop seat: one Trainium2 device, of which we used **one logical NeuronCore**
-(two physical cores, LNC=2; 736 GB/s DMA). The other two logical cores served vLLM. Neuron 2.34 runtime,
+(two physical cores, LNC=2; 736 GB/s DMA). Two of the other three served vLLM. Neuron 2.34 runtime,
 neuronx-cc 2.27, NKI 0.6.0, torch 2.11 with `torch.compile(backend="neuron_libtorch")`.
 
 **What came out.**

@@ -21,6 +21,18 @@ can query.
 | **one launch, end to end in a generation loop** | **27.55** (~36 tokens/s) |
 | memory-bandwidth floor (all weights + KV once at 736 GB/s) | 20.8 |
 
+Where the 7.0 ms above the floor are:
+
+| part of the step | measured | floor at 736 GB/s | fraction of floor |
+|---|---|---|---|
+| 36 decoder layers alone | 25.00 ms (1 run) | 19.08 ms | 76% |
+| embedding, final norm, LM head, argmax (by subtraction) | ~2.7 ms | 1.69 ms | ~62% |
+| **whole step** | **27.74 ms** | **20.77 ms** | **75%**, 551 GB/s achieved |
+
+About 5.9 ms of the gap is inside the layers (DMA efficiency within the nkilib blocks) and about 1.0 ms in
+the LM head, where our own head would recover ~0.5 ms once its loop fault is fixed. Sources:
+`megakernel/results/bench_8b_L36_v2.jsonl`, `spread_bench_step.jsonl`.
+
 Correctness: teacher-forced argmax matches HuggingFace float32 on **94 of 96 steps** (3 prompts × 32);
 both misses are near-ties (0.028 and 0.041 logits apart in HF's own logits) inside bf16 noise. The
 checker accepts the kernel on all five gates and rejects two injected bugs, naming each.
@@ -90,6 +102,9 @@ NEURON_RT_VISIBLE_CORES=2 python kernels/profile_mega.py --layers 1 --tag mine &
   indirect DMA inside the generate loop (ATTEMPTS #18): about 0.5 ms per token is waiting there.
 * A persistent K-tokens-per-launch kernel hits a neuronx-cc internal error (ATTEMPTS #15).
 * Single logical core; tensor parallelism across cores is the route below the 20.8 ms single-core floor.
+* Not measured: a like-for-like vLLM comparison (the 71.3 ms is one TP=2 run over HTTP, with no log in this
+  repo); how the step scales with context length (device timing at 1,024 tokens of context, generation at
+  256); batch sizes above 1.
 
 ## Credits
 
