@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+# Neuron compile / profiler artifacts (regenerate with the scripts)
+c[0-9a-f]*/
+neuronxcc-*/
+global_metric_store.json
+megakernel/results/profiles/*/inspect/
+megakernel/results/profiles/*/parquet/
+megakernel/results/profiles/*/*.ntff
+megakernel/results/profiles/*/*.neff
