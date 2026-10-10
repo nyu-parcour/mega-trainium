@@ -58,12 +58,12 @@ fine (found by fitting against deliberately wrong references); the documented ne
 
 ## Two checkers, two kinds of bug
 
-| | our device checker (`check.py`) | [nkiequiv](https://github.com/forthoney/symnki) (symbolic) |
+| | on the device (`check.py`, `kernels/test_head.py`) | [nkiequiv](https://github.com/forthoney/symnki) (symbolic) |
 |---|---|---|
 | runs on | Trainium2 | CPU, no device |
 | cost per verdict | 41–48 s for the LM head; 142 s for 36 real layers | **0.3 s** at small tiles; 24 s at full Trainium2 tiles |
 | covers | the whole step, real weights, real hardware | self-contained pieces, all inputs (proof over the reals) |
-| caught | the mask bug; a PSUM interleaving fault that is a hardware/compiler behaviour | a skipped k-tile, with the missing term named |
+| caught | the mask bug (`check.py`); a PSUM interleaving fault that is a hardware/compiler behaviour (`test_head.py`) | a skipped k-tile, with the missing term named |
 | misses | bugs on inputs it didn't sample | anything outside its NKI model (indirect DMA, the PSUM fault above) |
 
 Use nkiequiv as the inner, cheap gate on rewrites of a piece; send survivors to the device gates.

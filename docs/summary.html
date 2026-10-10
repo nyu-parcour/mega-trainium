@@ -202,7 +202,7 @@ footer .files { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(
   </div>
   <p>A wrong kernel here doesn't crash. Our first version was 52% off on real weights and returned plausible numbers. So <code>check.py</code> compares against an independent reference at every level, against the error bf16 rounding alone produces, and when it rejects, says which convention the kernel actually implements.</p>
   <div class="term" tabindex="0" aria-label="Checker output">
-<pre><span class="c">$ python check.py --resident          # final kernel, 2026-10-10 20:36 UTC</span>
+<pre><span class="c">$ python check.py --resident          # final kernel, 2026-10-10 20:30 UTC</span>
 <span class="p">[PASS]</span> layout  reference matches HF
 <span class="p">[PASS]</span> tiny    max error 1.02e-02 within 2.2e-02 (3x the 7.3e-03 that bf16 rounding alone gives)
 <span class="p">[PASS]</span> head    embedding exact, logits rel-L2 2.4e-03, argmax consistent
@@ -290,7 +290,7 @@ footer .files { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(
         <tr><td class="n">3</td><td>Build on <code>nkilib</code> blocks, write only the glue</td><td>36 layers in one launch on day one</td></tr>
         <tr><td class="n">4</td><td>Gate every change; a rejection names the cause</td><td>52% mask bug found in an afternoon</td></tr>
         <tr><td class="n">5</td><td>Profile with device counters, compute bounds, change one thing</td><td>−5.8% from one flag; the documented next step measured 10% slower</td></tr>
-        <tr><td class="n">6</td><td>Measure the real generation loop</td><td>33.9 → 27.6 ms per token</td></tr>
+        <tr><td class="n">6</td><td>Measure the real generation loop</td><td>33.9 → 27.7 ms per token</td></tr>
         <tr><td class="n">7</td><td>Report with spread</td><td>3 runs × 30 calls; 3 prompts × 32 steps</td></tr>
       </tbody>
     </table>
@@ -313,11 +313,11 @@ footer .files { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(
       </tbody>
     </table>
   </div>
-  <p class="pipe-note">A proof costs about 1/150 of a device check, so the agent runs it on every rewrite and sends only survivors to the device. The device gate stays, because hardware behaviour like the PSUM fault is outside any interpreter's model.</p>
+  <p class="pipe-note">At small tiles a proof costs about 1/150 of a device check, so the agent runs it on every rewrite and sends only survivors to the device. The device gate stays, because hardware behaviour like the PSUM fault is outside any interpreter's model.</p>
 </section>
 
 <footer>
-  <div>Everything is in the private repo <span class="mono">nyu-parcour/mega-trainium</span>: <span class="mono">megakernel/</span>, <span class="mono">skill/</span>, <span class="mono">heuristics/</span>. Every number here comes from <span class="mono">megakernel/results/</span>.</div>
+  <div>Everything is in the private repo <span class="mono">nyu-parcour/mega-trainium</span>: <span class="mono">megakernel/</span>, <span class="mono">skill/</span>, <span class="mono">heuristics/</span>. Device numbers come from <span class="mono">megakernel/results/</span> and proof times from <span class="mono">megakernel/symnki_poc/</span>; the vLLM figure is one earlier 256-token run, not logged there.</div>
   <div class="files"><span>megakernel/check.py</span><span>megakernel/ATTEMPTS.md</span><span>megakernel/NOTE.md</span><span>megakernel/symnki_poc/</span><span>skill/nki-megakernel-optimizer/</span><span>heuristics/</span></div>
 </footer>
 
