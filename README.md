@@ -5,6 +5,23 @@ megakernel on AWS Trainium.** Worked out on Qwen3-8B during Hack the Chip (2026-
 launch per token, **27.7 ms per token against 47.5 ms** for per-op `torch.compile` of the same math on
 the same core, correct against HuggingFace on real weights.
 
+```
+$ cd megakernel && NEURON_RT_VISIBLE_CORES=2 python check.py --resident     # final kernel, 2026-10-10 20:30 UTC
+[PASS] layout  reference matches HF  (17s)
+[PASS] tiny    max error 1.02e-02 within 2.2e-02 (3x the 7.3e-03 that bf16 rounding alone gives)  (17s)
+[PASS] head    embedding exact, logits rel-L2 2.4e-03, argmax consistent  (48s)
+[PASS] real    teacher-forced argmax agrees on 31/32 steps; every disagreement is a near-tie inside bf16 noise (step 6: HF margin 0.028 < 3 sigma 0.0712)  (142s)
+[PASS] speed   27.74 ms/token vs 47.60 per-op (1.72x), 75% of the HBM floor  (82s)
+ACCEPTED
+```
+
+With the original mask bug injected (`--control mask_active_zero`), the same checker rejects and names it: "the output is closer to the 'active_token_excluded' variant (rel-L2 1.01e-02) than to the correct reference (5.61e-02): the kernel implements active_token_excluded" (`megakernel/results/check_log.jsonl`).
+
+**The agent and its loop.** The agent is Claude (Opus 5.5) in Claude Code, with one of us steering. Each
+attempt in [`megakernel/ATTEMPTS.md`](megakernel/ATTEMPTS.md) is a kernel the agent wrote; `check.py` judged it, and the
+verdict with its reason, plus a device profile, decided the next attempt. The skill below is that loop
+written down, so the next run starts from it.
+
 A faster kernel for one model is a narrow product. What carries over to the next model and the next
 chip is the loop that found it: library blocks as the base, a checker that names the bug, profiles
 read as bounds, one measured change at a time, and every attempt logged. This repo packages that loop

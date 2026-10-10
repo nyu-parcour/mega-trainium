@@ -12,6 +12,9 @@ in `ATTEMPTS.md`.
 (two physical cores, LNC=2; 736 GB/s DMA). Two of the other three served vLLM. Neuron 2.34 runtime,
 neuronx-cc 2.27, NKI 0.6.0, torch 2.11 with `torch.compile(backend="neuron_libtorch")`.
 
+**By whom.** The agent is Claude (Opus 5.5) in Claude Code, with one of us steering: it wrote every attempt
+in `ATTEMPTS.md`, and `check.py`'s verdict, with its reason, decided the next one.
+
 **What came out.**
 
 |                                                                                               | ms per token    | runs, spread      |
