@@ -307,7 +307,7 @@ footer .files { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(
     <table>
       <thead><tr><th>Kernel</th><th>nkiequiv (CPU)</th><th>Trainium2 device</th></tr></thead>
       <tbody>
-        <tr><td>Our LM-head core, final structure</td><td><span class="chip acc">proved</span> 0.3 s at small tiles; 24 s at full tiles</td><td>correct; head 2.71 → 2.23 ms (−18%)</td></tr>
+        <tr><td>Our LM-head core, final structure</td><td><span class="chip acc">proved</span> 0.3 s at small tiles; 22 s at full tiles</td><td>correct; head 2.71 → 2.23 ms (−18%)</td></tr>
         <tr><td>Deliberate bug: one k-tile skipped</td><td><span class="chip rej">rejected</span> names the missing term</td><td>—</td></tr>
         <tr><td>Our real bug: 4 accumulation groups sharing one PSUM tile</td><td><span class="chip acc">proved</span> correct in NKI semantics</td><td><span class="chip rej">wrong</span> 14.5% error</td></tr>
       </tbody>

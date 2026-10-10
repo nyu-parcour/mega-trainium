@@ -8,7 +8,7 @@ nl.tile_size, so nkiequiv can prove them at its small profile and test numerics 
   lm_head_core              the version in the final code: one PSUM tile per vocab tile
   lm_head_core_shared_psum  attempt 17's first version: four accumulation groups in one [P, 4] PSUM tile.
                             On the device it lost one k-contribution in tiles 0..2 of every block
-                            (14.5% rel-L2) and was rejected by our checker's head gate.
+                            (14.5% rel-L2) and was caught by the device head test (kernels/test_head.py --tiled).
   lm_head_core_skip_k       a deliberately wrong variant (one k-tile skipped), as a negative control
 
 Run (from anywhere, symnki on PYTHONPATH):
