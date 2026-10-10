@@ -35,6 +35,7 @@ checker accepts the kernel on all five gates and rejects two injected bugs, nami
 | [`megakernel/ATTEMPTS.md`](megakernel/ATTEMPTS.md) | all 18 attempts with correctness and speed scores, including the failures |
 | [`megakernel/NOTE.md`](megakernel/NOTE.md) | one-page note: what ran, on what, what came out, how many runs, the spread |
 | [`megakernel/symnki_poc/`](megakernel/symnki_poc/README.md) | proof of concept: our LM head checked with [nkiequiv](https://github.com/forthoney/symnki), a symbolic equivalence checker for NKI |
+| [`examples/lm-head-walkthrough/`](examples/lm-head-walkthrough/README.md) | **worked example with all three tools on one piece**: the LM head from nkilib's kernel (2.71 ms) to our own (2.23 ms), with the corpus queries and nkiequiv proofs run live and the device result at each step, including the bug only the device caught |
 | [`heuristics/`](heuristics/NKI_HEURISTICS.md) | 724 NKI rules (docs, nki-samples, AWS agent skills), each with trigger, fix and source; `heuristics.py` gives the agent a card, retrieval and error-to-rule lookup |
 | [`docs/summary.html`](docs/summary.html) | one-page visual summary |
 

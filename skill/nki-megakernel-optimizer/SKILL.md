@@ -17,7 +17,8 @@ is chosen without a profile: the obvious next step in our case measured at 1% of
 the kernel 10% slower.
 
 Read `references/pitfalls.md` before the first compile. It lists every trap that cost hours, by symptom.
-`references/case-study.md` is the full worked example with numbers.
+`references/case-study.md` is the full worked example with numbers; `../../examples/lm-head-walkthrough/`
+takes one piece through the corpus, nkiequiv and the device gates, step by step.
 
 ## The rules corpus (use it in every phase)
 

@@ -316,9 +316,30 @@ footer .files { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(
   <p class="pipe-note">At small tiles a proof costs about 1/150 of a device check, so the agent runs it on every rewrite and sends only survivors to the device. The device gate stays, because hardware behaviour like the PSUM fault is outside any interpreter's model.</p>
 </section>
 
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Worked example · all three tools on one piece</div>
+    <h2>The LM head, from the library kernel to our own</h2>
+  </div>
+  <p>A replay of our LM-head work: every change starts from a profile symptom, the rules corpus names the fix, nkiequiv proves the rewrite, the device gates it. The corpus queries and proofs run live on CPU; device numbers are from the original profiles.</p>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Step</th><th>Device</th><th>Rule the corpus returns</th><th>nkiequiv</th></tr></thead>
+      <tbody>
+        <tr><td><b>v0</b> nkilib head</td><td class="n">2.71 ms, 230 GB/s<br>software DGE, 4,129 serial DMAs</td><td><code>dge-swdge-consumes-gpsimd</code></td><td>—</td></tr>
+        <tr><td><b>v1</b> weights on hardware DGE</td><td class="n">2.53 ms (−7%)<br>~1.2 KB per partition per DMA</td><td><code>dma-4kib-per-partition-saturates</code></td><td>—</td></tr>
+        <tr><td><b>v2a</b> our head: 32 KB DMAs, 4 groups in one PSUM tile</td><td><span class="chip rej">wrong</span> 14.5% error</td><td><code>cp-psum-accumulate-semantics</code></td><td><span class="chip acc">proved</span> blind to it</td></tr>
+        <tr><td><b>v2</b> one PSUM tile per vocab tile</td><td class="n"><b>2.23 ms (−18%)</b>, 280 GB/s</td><td>—</td><td><span class="chip acc">proved</span> 0.3 s / 22 s</td></tr>
+        <tr><td><b>v3</b> v2 inside the full step</td><td><span class="chip info">not adopted</span> DMA fault in the loop</td><td><code>dma-dge-mode-selection</code> (a lead, untested)</td><td>can't model indirect DMA</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="pipe-note">The final kernel keeps v0, so ~0.48 ms per token is still on the table. Step-by-step record, the script that reruns the CPU half and the one for the device half: <code>examples/lm-head-walkthrough/</code>.</p>
+</section>
+
 <footer>
   <div>Everything is in the private repo <span class="mono">nyu-parcour/mega-trainium</span>: <span class="mono">megakernel/</span>, <span class="mono">skill/</span>, <span class="mono">heuristics/</span>. Device numbers come from <span class="mono">megakernel/results/</span> and proof times from <span class="mono">megakernel/symnki_poc/</span>; the vLLM figure is one earlier 256-token run, not logged there.</div>
-  <div class="files"><span>megakernel/check.py</span><span>megakernel/ATTEMPTS.md</span><span>megakernel/NOTE.md</span><span>megakernel/symnki_poc/</span><span>skill/nki-megakernel-optimizer/</span><span>heuristics/</span></div>
+  <div class="files"><span>megakernel/check.py</span><span>megakernel/ATTEMPTS.md</span><span>megakernel/NOTE.md</span><span>megakernel/symnki_poc/</span><span>examples/lm-head-walkthrough/</span><span>skill/nki-megakernel-optimizer/</span><span>heuristics/</span></div>
 </footer>
 
 </div>
